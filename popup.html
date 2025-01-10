@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>页面内容提取器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+      width: 600px;
+      min-height: 300px;
+      box-sizing: border-box;
+    }
+    h3 {
+      font-size: 16px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+    h3 span:first-child {
+      margin-right: 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 50px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    button {
+      padding: 8px 12px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ccc;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    #copySuccess {
+      display: none;
+      background-color: #4CAF50;
+      color: white;
+      padding: 5px;
+      margin-top: 10px;
+      text-align: center;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <h3>输入正则表达式</h3>
+  <textarea id="regexInput" placeholder="例如：\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b"></textarea>
+  <button id="extractButton">提取</button>
+
+  <h3>
+    <span>匹配结果</span>
+    <span style="font-size: 14px; color: rgb(88, 86, 86); margin-left: auto;">匹配个数：<span id="matchCount">0</span></span>
+  </h3>
+  <pre id="result">等待提取...</pre>
+
+  <button id="copyButton">复制结果</button>
+  <div id="copySuccess">匹配结果已复制到剪贴板！</div>
+  <script src="popup.js"></script>
+</body>
+</html>
