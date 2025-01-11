@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,27 +13,48 @@
       min-height: 300px;
       box-sizing: border-box;
     }
+
     h3 {
       font-size: 16px;
       margin: 10px 0;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      /* 使标题中的内容（比如匹配个数）分布在两边 */
     }
+
     h3 span:first-child {
       margin-right: 10px;
     }
-    textarea {
+
+    h3 span:last-child {
+      font-size: 14px;
+      color: rgb(88, 86, 86);
+      text-align: right;
+      /* 右对齐 */
+      flex-grow: 1;
+      /* 使其填满父容器，从而推动“匹配个数”往右边挤 */
+    }
+
+    textarea,
+    select,
+    input {
       width: 100%;
-      height: 50px;
       margin-bottom: 10px;
       font-size: 14px;
     }
+
+    textarea {
+      height: 50px;
+    }
+
     button {
       padding: 8px 12px;
       font-size: 16px;
       cursor: pointer;
       margin-top: 10px;
     }
+
     pre {
       background: #f4f4f4;
       padding: 10px;
@@ -42,6 +64,7 @@
       max-height: 200px;
       overflow-y: auto;
     }
+
     #copySuccess {
       display: none;
       background-color: #4CAF50;
@@ -51,21 +74,68 @@
       text-align: center;
       border-radius: 3px;
     }
+
+    #tabs {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    #tabs button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: #ddd;
+      cursor: pointer;
+    }
+
+    #tabs button.active {
+      background: #bbb;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    ul li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
   </style>
 </head>
+
 <body>
-  <h3>输入正则表达式</h3>
-  <textarea id="regexInput" placeholder="例如：\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b"></textarea>
-  <button id="extractButton">提取</button>
-
-  <h3>
-    <span>匹配结果</span>
-    <span style="font-size: 14px; color: rgb(88, 86, 86); margin-left: auto;">匹配个数：<span id="matchCount">0</span></span>
-  </h3>
-  <pre id="result">等待提取...</pre>
-
-  <button id="copyButton">复制结果</button>
-  <div id="copySuccess">匹配结果已复制到剪贴板！</div>
+  <div id="tabs">
+    <button id="homeTab" class="active">首页</button>
+    <button id="manageTab">管理正则</button>
+  </div>
+  <div id="homePage">
+    <h3>选择保存的正则表达式</h3>
+    <select id="savedRegexSelect">
+      <option value="">选择一个正则表达式...</option>
+    </select>
+    <h3>输入正则表达式</h3>
+    <textarea id="regexInput" placeholder="例如：\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b"></textarea>
+    <button id="extractButton">提取</button>
+    <h3>
+      <span>匹配结果</span>
+      <span style="font-size: 14px; color: rgb(88, 86, 86); margin-left: auto;">匹配个数：<span
+          id="matchCount">0</span></span>
+    </h3>
+    <pre id="result">等待提取...</pre>
+    <button id="copyButton">复制结果</button>
+    <div id="copySuccess">匹配结果已复制到剪贴板！</div>
+  </div>
+  <div id="managePage" style="display:none;">
+    <h3>管理常用正则表达式</h3>
+    <input id="newRegexName" placeholder="正则表达式名称">
+    <textarea id="newRegexInput" placeholder="输入新的正则表达式"></textarea>
+    <button id="saveRegexButton">保存</button>
+    <ul id="regexList"></ul>
+  </div>
   <script src="popup.js"></script>
 </body>
+
 </html>
