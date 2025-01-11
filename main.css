@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    width: 450px;
+    min-height: 350px;
+    box-sizing: border-box;
+}
+
+h3 {
+    font-size: 16px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h3 span:first-child {
+    margin-right: 10px;
+}
+
+h3 span:last-child {
+    font-size: 14px;
+    color: rgb(88, 86, 86);
+    text-align: right;
+    flex-grow: 1;
+}
+
+textarea,
+select,
+input {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+textarea {
+    height: 50px;
+}
+
+button {
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+pre {
+    background: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ccc;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+#copySuccess {
+    display: none;
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px;
+    /* 增加内边距 */
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 3px;
+    width: 100%;
+    /* 提示框宽度适应父容器 */
+    box-sizing: border-box;
+    /* 包括 padding 在内的总宽度 */
+    word-wrap: break-word;
+    /* 自动换行 */
+    max-width: 100%;
+    /* 保证宽度不超出容器 */
+    min-height: 30px;
+    /* 最小高度，避免内容被截断 */
+    line-height: 1;
+    /* 行高，确保文本垂直居中 */
+}
+
+
+#tabs {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+#tabs button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: #ddd;
+    cursor: pointer;
+}
+
+#tabs button.active {
+    background: #bbb;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ccc;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.edit-btn,
+.delete-btn {
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
