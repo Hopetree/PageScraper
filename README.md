@@ -6,5 +6,13 @@
 
 ## 效果
 
-<img width="621" alt="image" src="https://github.com/user-attachments/assets/c1296f2e-f4d3-4c96-903f-084cf444fcc9" />
+可以本地保存正则，方便后续直接选择使用
+
+<img width="484" alt="image" src="https://github.com/user-attachments/assets/c840ed50-1176-47ff-80bd-5350ac3f7814" />
+
+正则管理界面，支持增删改查
+
+<img width="484" alt="image" src="https://github.com/user-attachments/assets/75b9c56c-c77e-4562-bad4-85753feac3f9" />
+
+
 
