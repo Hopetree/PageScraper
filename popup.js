@@ -19,10 +19,7 @@ function loadSavedRegex() {
   const regexSelect = document.getElementById('savedRegexSelect');
   regexSelect.innerHTML = '<option value="">选择一个正则表达式...</option>'; // 清空当前的选项
 
-  savedRegex.forEach(({
-    name,
-    pattern
-  }) => {
+  savedRegex.forEach(({ name, pattern }) => {
     const option = document.createElement('option');
     option.value = pattern;
     option.textContent = name;
@@ -35,7 +32,7 @@ document.getElementById('savedRegexSelect').addEventListener('change', (event) =
   document.getElementById('regexInput').value = event.target.value;
 });
 
-// 保存新的正则表达式
+// 保存或更新正则表达式
 document.getElementById('saveRegexButton').addEventListener('click', () => {
   const regexName = document.getElementById('newRegexName').value.trim();
   const regexPattern = document.getElementById('newRegexInput').value.trim();
@@ -56,22 +53,27 @@ document.getElementById('saveRegexButton').addEventListener('click', () => {
   // 获取已保存的正则表达式
   const savedRegex = JSON.parse(localStorage.getItem('savedRegex')) || [];
 
-  // 检查是否有重复的名称
-  if (savedRegex.some(item => item.name === regexName)) {
-    alert('名称已存在，请使用其他名称。');
-    return;
+  // 检查是否有同名的正则表达式
+  const existingRegexIndex = savedRegex.findIndex(item => item.name === regexName);
+
+  if (existingRegexIndex !== -1) {
+    // 如果正则已存在，更新
+    savedRegex[existingRegexIndex] = {
+      name: regexName,
+      pattern: regexPattern
+    };
+    localStorage.setItem('savedRegex', JSON.stringify(savedRegex));
+    alert(`正则 "${regexName}" 已更新！`);
+  } else {
+    // 如果正则不存在，新增
+    savedRegex.push({
+      name: regexName,
+      pattern: regexPattern
+    });
+    localStorage.setItem('savedRegex', JSON.stringify(savedRegex));
+    alert(`正则 "${regexName}" 已保存！`);
   }
 
-  // 新的正则表达式对象
-  savedRegex.push({
-    name: regexName,
-    pattern: regexPattern
-  });
-
-  // 保存正则表达式到 localStorage
-  localStorage.setItem('savedRegex', JSON.stringify(savedRegex));
-
-  alert(`正则 "${regexName}" 已保存！`);
   loadSavedRegex(); // 重新加载下拉框中的选项
   updateRegexList(); // 更新管理页面的正则表达式列表
 });
@@ -83,45 +85,118 @@ function updateRegexList() {
   regexList.innerHTML = ''; // 清空现有列表
 
   // 填充已保存的正则表达式
-  savedRegex.forEach(({
-    name,
-    pattern
-  }, index) => {
-    const li = document.createElement('li');
-    li.textContent = `${name}: ${pattern}`;
+  savedRegex.forEach(({ name, pattern }, index) => {
+    const tr = document.createElement('tr');
 
-    // 创建删除按钮
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = '删除';
-    deleteButton.style.marginLeft = '10px';
+    // 名称列
+    const nameTd = document.createElement('td');
+    nameTd.textContent = name;
+    tr.appendChild(nameTd);
 
-    // 删除按钮的事件处理
-    deleteButton.addEventListener('click', () => {
-      savedRegex.splice(index, 1); // 从数组中删除正则表达式
-      localStorage.setItem('savedRegex', JSON.stringify(savedRegex)); // 更新 localStorage
-      alert(`正则 "${name}" 已删除！`);
-      loadSavedRegex(); // 重新加载下拉框
-      updateRegexList(); // 更新列表
+    // 正则表达式列
+    const patternTd = document.createElement('td');
+    patternTd.textContent = pattern;
+    tr.appendChild(patternTd);
+
+    // 操作列
+    const actionTd = document.createElement('td');
+    const editButton = document.createElement('button');
+    editButton.classList.add('edit-btn');
+    editButton.textContent = '编辑';
+    editButton.addEventListener('click', () => {
+      editRegex(index);
     });
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-btn');
+    deleteButton.textContent = '删除';
+    deleteButton.addEventListener('click', () => {
+      deleteRegex(index, name);
+    });
+    actionTd.appendChild(editButton);
+    actionTd.appendChild(deleteButton);
+    tr.appendChild(actionTd);
 
-    li.appendChild(deleteButton);
-    regexList.appendChild(li);
+    regexList.appendChild(tr);
   });
+}
+
+// 编辑正则表达式
+function editRegex(index) {
+  const savedRegex = JSON.parse(localStorage.getItem('savedRegex')) || [];
+  const regexToEdit = savedRegex[index];
+
+  const regexNameInput = document.getElementById('newRegexName');
+  const regexPatternInput = document.getElementById('newRegexInput');
+
+  // 填充输入框
+  regexNameInput.value = regexToEdit.name;
+  regexPatternInput.value = regexToEdit.pattern;
+
+  // 在保存按钮事件中更新正则
+  document.getElementById('saveRegexButton').onclick = function () {
+    saveEditedRegex(index);
+  };
+}
+
+// 保存编辑后的正则表达式
+function saveEditedRegex(index) {
+  const regexName = document.getElementById('newRegexName').value.trim();
+  const regexPattern = document.getElementById('newRegexInput').value.trim();
+
+  if (!regexName || !regexPattern) {
+    alert('请输入名称和正则表达式。');
+    return;
+  }
+
+  // 测试正则表达式的有效性
+  try {
+    new RegExp(regexPattern); // 如果无法创建正则对象，抛出错误
+  } catch {
+    alert('请输入有效的正则表达式。');
+    return;
+  }
+
+  // 获取已保存的正则表达式
+  const savedRegex = JSON.parse(localStorage.getItem('savedRegex')) || [];
+
+  // 更新正则表达式
+  savedRegex[index] = {
+    name: regexName,
+    pattern: regexPattern
+  };
+
+  // 保存到 localStorage
+  localStorage.setItem('savedRegex', JSON.stringify(savedRegex));
+
+  alert(`正则 "${regexName}" 已更新！`);
+  loadSavedRegex(); // 重新加载下拉框中的选项
+  updateRegexList(); // 更新管理页面的正则表达式列表
+}
+
+// 删除正则表达式
+function deleteRegex(index, name) {
+  const savedRegex = JSON.parse(localStorage.getItem('savedRegex')) || [];
+  savedRegex.splice(index, 1); // 从数组中删除正则表达式
+  localStorage.setItem('savedRegex', JSON.stringify(savedRegex)); // 更新 localStorage
+  alert(`正则 "${name}" 已删除！`);
+  loadSavedRegex(); // 重新加载下拉框
+  updateRegexList(); // 更新列表
 }
 
 // 提取并匹配页面内容
 document.getElementById('extractButton').addEventListener('click', () => {
-  const regexInput = document.getElementById('regexInput').value;
+  const regexInput = document.getElementById('regexInput').value.trim();
+
+  // 检查正则输入是否为空
+  if (!regexInput) {
+    alert('请输入正则表达式');
+    return;
+  }
 
   // 在当前标签页执行脚本
-  chrome.tabs.query({
-    active: true,
-    currentWindow: true
-  }, (tabs) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
-      target: {
-        tabId: tabs[0].id
-      },
+      target: { tabId: tabs[0].id },
       func: extractContentAndMatch,
       args: [regexInput]
     }, (results) => {
@@ -143,23 +218,30 @@ document.getElementById('extractButton').addEventListener('click', () => {
 
 // 提取页面内容并用正则匹配
 function extractContentAndMatch(regexInput) {
-  const html = document.documentElement.outerHTML;
-  const regex = new RegExp(regexInput, 'gi');
-  const matches = [];
-  let match;
+  try {
+    // 确保正则表达式被正确构造
+    const regex = new RegExp(regexInput, 'gi'); 
+    const html = document.documentElement.outerHTML;
+    const matches = [];
+    let match;
 
-  while ((match = regex.exec(html)) !== null) {
-    if (match.length > 1) {
-      matches.push(match.slice(1).join(' '));
-    } else {
-      matches.push(match[0]);
-    }
+    while ((match = regex.exec(html)) !== null) {
+      // 将所有捕获的组添加到结果
+      if (match.length > 1) {
+        matches.push(match.slice(1).join(' '));
+      } else {
+        matches.push(match[0]);
+      }
 
-    if (match.index === regex.lastIndex) {
-      regex.lastIndex++;
+      if (match.index === regex.lastIndex) {
+        regex.lastIndex++;
+      }
     }
+    return matches;
+  } catch (error) {
+    console.error('正则表达式无效:', error);
+    return [];
   }
-  return matches;
 }
 
 // 复制匹配结果到剪贴板

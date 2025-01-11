@@ -10,7 +10,7 @@
       font-family: Arial, sans-serif;
       margin: 10px;
       width: 450px;
-      min-height: 300px;
+      min-height: 350px;
       box-sizing: border-box;
     }
 
@@ -20,7 +20,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      /* 使标题中的内容（比如匹配个数）分布在两边 */
     }
 
     h3 span:first-child {
@@ -31,9 +30,7 @@
       font-size: 14px;
       color: rgb(88, 86, 86);
       text-align: right;
-      /* 右对齐 */
       flex-grow: 1;
-      /* 使其填满父容器，从而推动“匹配个数”往右边挤 */
     }
 
     textarea,
@@ -61,7 +58,7 @@
       border: 1px solid #ccc;
       white-space: pre-wrap;
       word-wrap: break-word;
-      max-height: 200px;
+      max-height: 150px;
       overflow-y: auto;
     }
 
@@ -69,11 +66,25 @@
       display: none;
       background-color: #4CAF50;
       color: white;
-      padding: 5px;
+      padding: 10px;
+      /* 增加内边距 */
       margin-top: 10px;
       text-align: center;
       border-radius: 3px;
+      width: 100%;
+      /* 提示框宽度适应父容器 */
+      box-sizing: border-box;
+      /* 包括 padding 在内的总宽度 */
+      word-wrap: break-word;
+      /* 自动换行 */
+      max-width: 100%;
+      /* 保证宽度不超出容器 */
+      min-height: 40px;
+      /* 最小高度，避免内容被截断 */
+      line-height: 1.5;
+      /* 行高，确保文本垂直居中 */
     }
+
 
     #tabs {
       display: flex;
@@ -92,16 +103,42 @@
       background: #bbb;
     }
 
-    ul {
-      list-style-type: none;
-      padding: 0;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
     }
 
-    ul li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5px;
+    table,
+    th,
+    td {
+      border: 1px solid #ccc;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    .edit-btn,
+    .delete-btn {
+      padding: 5px 10px;
+      cursor: pointer;
+      margin: 2px;
+    }
+
+    .edit-btn {
+      background-color: #ffc107;
+    }
+
+    .delete-btn {
+      background-color: #f44336;
+      color: white;
     }
   </style>
 </head>
@@ -133,7 +170,16 @@
     <input id="newRegexName" placeholder="正则表达式名称">
     <textarea id="newRegexInput" placeholder="输入新的正则表达式"></textarea>
     <button id="saveRegexButton">保存</button>
-    <ul id="regexList"></ul>
+    <table id="regexTable">
+      <thead>
+        <tr>
+          <th>正则表达式名称</th>
+          <th>正则表达式</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="regexList"></tbody>
+    </table>
   </div>
   <script src="popup.js"></script>
 </body>
