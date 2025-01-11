@@ -116,6 +116,10 @@ th {
     background-color: #f4f4f4
 }
 
+#copyButton {
+    background-color: #17a2b8;
+}
+
 #saveRegexButton {
     background-color: #28a745;
 }
