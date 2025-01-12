@@ -14,6 +14,13 @@
 
 ![image](https://github.com/user-attachments/assets/55f6d6b0-44c7-4a95-8c15-847f365dd0cb)
 
+## 使用方式
+
+下载本项目到本地，然后在浏览器中加载插件目录即可：
+
+![image](https://github.com/user-attachments/assets/13f034a5-e23e-4d99-b93b-b0d5f7ae4086)
+
+
 
 
 
