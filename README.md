@@ -8,11 +8,12 @@
 
 可以本地保存正则，方便后续直接选择使用
 
-<img width="484" alt="image" src="https://github.com/user-attachments/assets/c840ed50-1176-47ff-80bd-5350ac3f7814" />
+![image](https://github.com/user-attachments/assets/8b326589-bbf9-461e-b260-112b940917b7)
 
 正则管理界面，支持增删改查
 
-<img width="484" alt="image" src="https://github.com/user-attachments/assets/75b9c56c-c77e-4562-bad4-85753feac3f9" />
+![image](https://github.com/user-attachments/assets/55f6d6b0-44c7-4a95-8c15-847f365dd0cb)
+
 
 
 
