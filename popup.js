@@ -1,6 +1,3 @@
-let isEditing = false;
-let editingIndex = -1; // 记录正在编辑的正则索引
-
 // Tab切换逻辑
 document.getElementById('homeTab').addEventListener('click', () => {
   switchTab('homePage', 'homeTab');
@@ -56,16 +53,19 @@ document.getElementById('saveRegexButton').addEventListener('click', () => {
   }
 
   const savedRegex = JSON.parse(localStorage.getItem('savedRegex')) || [];
+
+  // 查找是否已经有同名的正则表达式
   const existingIndex = savedRegex.findIndex(item => item.name === regexName);
 
-  if (isEditing || existingIndex !== -1) {
-    const indexToUpdate = isEditing ? editingIndex : existingIndex;
-    savedRegex[indexToUpdate] = {
+  if (existingIndex !== -1) {
+    // 如果正则表达式名称已存在，则更新该条数据
+    savedRegex[existingIndex] = {
       name: regexName,
       pattern: regexPattern
     };
     alert(`正则 "${regexName}" 已更新！`);
   } else {
+    // 如果正则表达式名称不存在，则新增数据
     savedRegex.push({
       name: regexName,
       pattern: regexPattern
@@ -73,11 +73,12 @@ document.getElementById('saveRegexButton').addEventListener('click', () => {
     alert(`正则 "${regexName}" 已保存！`);
   }
 
+  // 保存更新后的数据到 localStorage
   localStorage.setItem('savedRegex', JSON.stringify(savedRegex));
+
+  // 更新页面上的正则列表
   loadSavedRegex();
   updateRegexList();
-  isEditing = false;
-  editingIndex = -1;
 });
 
 function updateRegexList() {
@@ -88,7 +89,7 @@ function updateRegexList() {
   savedRegex.forEach(({
     name,
     pattern
-  }, index) => {
+  }) => {
     const tr = document.createElement('tr');
     const nameTd = document.createElement('td');
     nameTd.textContent = name;
@@ -103,13 +104,13 @@ function updateRegexList() {
     editButton.classList.add('edit-btn');
     editButton.textContent = '编辑';
     editButton.addEventListener('click', () => {
-      editRegex(index);
+      editRegex(name);
     });
     const deleteButton = document.createElement('button');
     deleteButton.classList.add('delete-btn');
     deleteButton.textContent = '删除';
     deleteButton.addEventListener('click', () => {
-      deleteRegex(index, name);
+      deleteRegex(name);
     });
     actionTd.appendChild(editButton);
     actionTd.appendChild(deleteButton);
@@ -119,21 +120,19 @@ function updateRegexList() {
   });
 }
 
-function editRegex(index) {
+function editRegex(name) {
   const savedRegex = JSON.parse(localStorage.getItem('savedRegex')) || [];
-  const regexToEdit = savedRegex[index];
+  const regexToEdit = savedRegex.find(item => item.name === name);
 
   document.getElementById('newRegexName').value = regexToEdit.name;
   document.getElementById('newRegexInput').value = regexToEdit.pattern;
-
-  isEditing = true;
-  editingIndex = index;
 }
 
-function deleteRegex(index, name) {
+function deleteRegex(name) {
   const savedRegex = JSON.parse(localStorage.getItem('savedRegex')) || [];
-  savedRegex.splice(index, 1);
-  localStorage.setItem('savedRegex', JSON.stringify(savedRegex));
+  const updatedRegex = savedRegex.filter(item => item.name !== name);
+
+  localStorage.setItem('savedRegex', JSON.stringify(updatedRegex));
   alert(`正则 "${name}" 已删除！`);
   loadSavedRegex();
   updateRegexList();
